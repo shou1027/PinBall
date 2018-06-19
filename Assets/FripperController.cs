@@ -10,6 +10,9 @@ public class FripperController : MonoBehaviour {
 
 	private float flickAngle = -20;
 
+	private int rightId = 0;
+	private int leftId = 0;
+
 	// Use this for initialization
 	void Start () {
 		this.myHingeJoint = GetComponent<HingeJoint> ();
@@ -36,31 +39,22 @@ public class FripperController : MonoBehaviour {
 			SetAngle (this.defaultAngle);
 		}
 
-		if (Input.touchSupported) {
-			if (Input.touches [0].phase == TouchPhase.Began) {
-				if (Input.touches [0].position.x > 540 && tag == "RightFripperTag") {
-					SetAngle (this.flickAngle);
-				} else if (Input.touches [0].position.x <= 540 && tag == "LeftFripperTag") {
-					SetAngle (this.flickAngle);
-				}				
-			} else if (Input.touches [0].phase == TouchPhase.Ended) {
-				if (Input.touches [0].rawPosition.x > 540 && tag == "RightFripperTag") {
-					SetAngle (this.defaultAngle);
-				} else if (Input.touches [0].rawPosition.x <= 540 && tag == "LeftFripperTag") {
-					SetAngle (this.defaultAngle);
-				}
-			}
+		for(int i = 0;i < Input.touchCount;i++){
 
-			if (Input.touches [1].phase == TouchPhase.Began) {
-				if (Input.touches [1].position.x > 540 && tag == "RightFripperTag") {
+			Debug.Log (Input.touches [i].fingerId);
+
+			if (Input.touches [i].phase == TouchPhase.Began) {
+				if (Input.touches [i].position.x > Screen.width / 2 && tag == "RightFripperTag") {
 					SetAngle (this.flickAngle);
-				} else if (Input.touches [1].position.x <= 540 && tag == "LeftFripperTag") {
+					rightId = Input.touches [i].fingerId;
+				} else if (Input.touches [i].position.x <= Screen.width / 2 && tag == "LeftFripperTag") {
 					SetAngle (this.flickAngle);
+					leftId = Input.touches [i].fingerId;
 				}				
-			} else if (Input.touches [1].phase == TouchPhase.Ended) {
-				if (Input.touches [1].rawPosition.x > 540 && tag == "RightFripperTag") {
+			} else if (Input.touches [i].phase == TouchPhase.Ended) {
+				if (Input.touches[i].fingerId == rightId && tag == "RightFripperTag") {
 					SetAngle (this.defaultAngle);
-				} else if (Input.touches [1].rawPosition.x <= 540 && tag == "LeftFripperTag") {
+				} else if (Input.touches[i].fingerId == leftId && tag == "LeftFripperTag") {
 					SetAngle (this.defaultAngle);
 				}
 			}
